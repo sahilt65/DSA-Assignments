@@ -2,75 +2,96 @@
 Implement Heap sort to sort given set of values using max or min heap.
 */
 
+#include<iostream>
 #include<bits/stdc++.h>
 using namespace std;
-void heapify(int arr[], int n, int i){
-    int largest = i;
-    int left = 2 * i;
-    int right = 2 * i + 1;
-
-    if(left <= n && arr[largest] < arr[left]){
-       //((left <= n)checking left exist or not)
-        largest = left;
+void heapify(int arr[],int n,int root){
+    int largest=root;
+    int lchild=2*root+1;
+    int rchild=2*root+2;
+    if(lchild<n && arr[lchild]>arr[largest]){
+        largest=lchild;
     }
-
-    if(right  <=  n && arr[largest] < arr[right]){
-      //((right <= n)checking right exist or not)  
-        largest = right;
+    if(rchild<n && arr[rchild]>arr[largest]){
+        largest=rchild;
     }
-
-    if(largest != i){
-        swap(arr[largest], arr[i]);
-        heapify(arr, n, largest);
+    if(largest!=root){
+        swap(arr[root],arr[largest]);
+        heapify(arr,n,largest);
+    }
+}
+void heapify1(int arr[],int n,int root){
+    int smallest=root;
+    int lchild=2*root+1;
+    int rchild=2*root+2;
+    if(lchild<n && arr[lchild]<arr[smallest]){
+        smallest=lchild;
+    }
+    if(rchild<n && arr[rchild]<arr[smallest]){
+        smallest=rchild;
+    }
+    if(smallest!=root){
+        swap(arr[root],arr[smallest]);
+        heapify(arr,n,smallest);
     }
 }
 
-void heapSort(int arr[], int n){
-    int size = n;
-
-    while(size>1){
-        //step 1
-        swap(arr[1], arr[size]);
-        //step 2
-        size--;
-        //step 3
-        heapify(arr, size, 1);
-
+//MAX HEAP
+void maxheap(int arr[],int n){
+    for(int i=(n/2)-1;i>=0;i--) {
+        heapify(arr,n,i);
+    }
+    for(int i=n-1;i>=0;i--){
+        swap(arr[0],arr[i]);
+        heapify(arr,i,0);
     }
 }
 
-
-int main() {
-    // heap h ;
-    int v;
-    cout<<"Enter the size of Heap"<<endl;
-    cin>>v;
-    v = v+1;
-    int arr[v];
-    arr[0] = -1;
-
-    int n = v-1;
-    cout<<"Enter the Elements in the Heap"<<endl;
-    for(int i = 1; i<v; i++){
+//MIN HEAP
+void minheap(int arr[],int n){
+    for(int i=(n/2)-1;i>=0;i--){
+        heapify1(arr,n,i);
+    }
+    for(int i=n-1;i>=0;i--){
+        swap(arr[0],arr[i]);
+        heapify1(arr,i,0);
+    }
+}
+void display(int arr[],int n){
+    cout<<"Your sorted list"<<endl;
+    for(int i=0;i<n;i++){
+        cout<<arr[i]<<" ";
+    }
+    cout<<endl;
+}
+int main(){
+    int n;
+    cout<<"Enter the size of Array: "<<endl;
+    cin>>n;
+    int arr[n];
+    for(int i=0;i<n;i++){
+        cout<<"Enter the Element"<<i+1<<endl;
         cin>>arr[i];
     }
+    int ch;
+    while(ch!=3){
+        cout<<"1.For MaxHeap\n2.For Minheap\n3.Exit";
+        cin>>ch;
+        switch (ch){
+            case 1:
+                maxheap(arr,n);
+                display(arr,n);
+                cout<<endl;
+                break;
 
-    for(int i = n/2; i>0; i--){
-        heapify(arr, n, i);
-    }
-     
-    cout<<"Printing Array Before Heap Sort"<<endl;
-    for(int i = 1 ; i<=n; i++){
-        cout<<arr[i]<<" ";
-    }
-    cout<<endl<<endl;
+            case 2:
+                minheap(arr,n);
+                display(arr,n);
+                cout<<endl;
+                break;
 
-    heapSort(arr, n);
-    cout<<"Printing Array After Heap Sort"<<endl;
-    for(int i = 1 ; i<=n; i++){
-        cout<<arr[i]<<" ";
+            case 3:
+                break;
+        }
     }
-    cout<<endl; 
-    
-    return 0;
 }
